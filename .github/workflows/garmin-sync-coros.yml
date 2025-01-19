@@ -5,8 +5,8 @@ on:
   schedule:
     - cron: '0 1,8,21 * * ?'
 env:
-  GITHUB_NAME: ${{ secrets.GITHUB_NAME }}
-  GITHUB_EMAIL: ${{ secrets.GITHUB_EMAIL }}
+  GITHUB_NAME: ${{ secrets.GH_NAME }}
+  GITHUB_EMAIL: ${{ secrets.GH_EMAIL }}
   ## 佳明配置
   GARMIN_AUTH_DOMAIN: ${{ secrets.GARMIN_AUTH_DOMAIN }}
   GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
