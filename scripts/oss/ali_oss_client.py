@@ -2,6 +2,7 @@ import urllib3
 import json
 import oss2
 import os
+import ssl
 
 from oss2 import SizedFileAdapter, determine_part_size
 from oss2.models import PartInfo
@@ -15,7 +16,18 @@ class AliOssClient:
         self.security_token = None
         self.access_key_id = None
         self.access_key_secret = None
-        self.req = urllib3.PoolManager()
+        
+        # Create SSL context with verification disabled
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+        
+        # Use the SSL context in PoolManager
+        self.req = urllib3.PoolManager(
+            ssl_context=ssl_context,
+            cert_reqs='CERT_NONE'
+        )
+        
         self.client = None
         self.initClient()
 

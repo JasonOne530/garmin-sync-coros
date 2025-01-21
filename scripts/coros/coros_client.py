@@ -1,7 +1,7 @@
 import urllib3
 import json
 import hashlib
-
+import ssl
 
 class CorosClient:
     
@@ -9,9 +9,21 @@ class CorosClient:
         
         self.email = email
         self.password = password
-        self.req = urllib3.PoolManager()
+        
+        # Create SSL context with verification disabled
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+        
+        # Use the SSL context in PoolManager
+        self.req = urllib3.PoolManager(
+            ssl_context=ssl_context,
+            cert_reqs='CERT_NONE'
+        )
+        
         self.accessToken = None
         self.userId = None
+
     
     ## 登录接口
     def login(self):

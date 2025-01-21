@@ -13,6 +13,9 @@ from coros.coros_client import CorosClient
 from oss.ali_oss_client import AliOssClient
 from utils.md5_utils import calculate_md5_file
 
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 SYNC_CONFIG = {
     'GARMIN_AUTH_DOMAIN': '',
     'GARMIN_EMAIL': '',
@@ -36,9 +39,11 @@ if __name__ == "__main__":
 
    # 首先读取 面板变量 或者 github action 运行变量
   for k in SYNC_CONFIG:
-      if os.getenv(k):
-          v = os.getenv(k)
-          SYNC_CONFIG[k] = v
+    if os.getenv(k):
+      v = os.getenv(k)
+    else:
+      v = input(f"Please input {k}:")
+    SYNC_CONFIG[k] = v
   
   ## db 名称
   db_name = "garmin.db"
