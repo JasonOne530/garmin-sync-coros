@@ -81,20 +81,20 @@ if __name__ == "__main__":
       file_path = os.path.join(GARMIN_FIT_DIR, f"{un_sync_id}.zip")
       with open(file_path, "wb") as fb:
           fb.write(file)
-      file_path_list.append(file_path)
+      file_path_list.append((un_sync_id, file_path))
       
     except Exception as err:
       print(err)
       # garmin_db.updateExceptionSyncStatus(un_sync_id)
       # exit()
-  for file_path in file_path_list:
+  for activity_id, file_path in file_path_list:
     try:
       client = AliOssClient()
       oss_obj = client.multipart_upload(file_path,  f"{corosClient.userId}/{calculate_md5_file(file_path)}.zip")
       size = os.path.getsize(file_path)
-      upload_result = corosClient.uploadActivity(f"fit_zip/{corosClient.userId}/{calculate_md5_file(file_path)}.zip", calculate_md5_file(file_path), f"{un_sync_id}.zip", size)
+      upload_result = corosClient.uploadActivity(f"fit_zip/{corosClient.userId}/{calculate_md5_file(file_path)}.zip", calculate_md5_file(file_path), f"{activity_id}.zip", size)
       if upload_result:
-          garmin_db.updateSyncStatus(un_sync_id)
+          garmin_db.updateSyncStatus(activity_id)
     except Exception as err:
       print(err)
       garmin_db.updateExceptionSyncStatus(un_sync_id)
